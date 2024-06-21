@@ -10,7 +10,7 @@ AddEventHandler('onResourceStop', function(resource)
     end
 end)
 
-function ChapoPdCreatePed(pedModel, pedCoords)
+function PtcPdCreatePed(pedModel, pedCoords)
     local pedModel = joaat(pedModel) 
     local pedCoords = pedCoords 
     lib.requestModel(pedModel, 5000) 
@@ -21,17 +21,17 @@ function ChapoPdCreatePed(pedModel, pedCoords)
 end 
 
 function TargetPdGarag()
-    for k, v in pairs(Chapo.ConfigPdGarage) do  
-        local configped = Chapo.ConfigPdGarage[k]
-        ped = ChapoPdCreatePed(configped.TargetZone.ped.model, configped.TargetZone.ped.coords)
+    for k, v in pairs(Ptc.ConfigPdGarage) do  
+        local configped = Ptc.ConfigPdGarage[k]
+        ped = PtcPdCreatePed(configped.TargetZone.ped.model, configped.TargetZone.ped.coords)
         exports['ox_target']:addModel(v.TargetZone.ped.model, {
-            name = 'chapoleplusbeau',
+            name = 'ptc',
             label = v.TargetZone.ped.label,
             icon = v.TargetZone.ped.icon,
             groups = { ['police'] = v.TargetZone.ped.grade },
             distance = 2.5,
             onSelect = function()
-                lib.showContext('chpd_menu_garade')
+                lib.showContext('ptc_menu_garade')
             end
         })
     end
@@ -39,7 +39,7 @@ end
 
 garagemenu = {}
 
-for k,v in ipairs(Chapo.GarageMenu) do
+for k,v in ipairs(Ptc.GarageMenu) do
     table.insert(garagemenu, {
         title = v.label,
         onSelect = function()
@@ -49,7 +49,7 @@ for k,v in ipairs(Chapo.GarageMenu) do
                 while not HasModelLoaded(v.name) do 
                   Wait(0)
                 end
-                currentCar = CreateVehicle(v.name, Chapo.VehSpawnCoords, false, false) 
+                currentCar = CreateVehicle(v.name, Ptc.VehSpawnCoords, false, false) 
                 SetVehicleNumberPlateText(currentCar, v.platename)
                 SetPedIntoVehicle(PlayerPedId(),currentCar,-1)  
                 carOut = true
@@ -58,10 +58,10 @@ for k,v in ipairs(Chapo.GarageMenu) do
                     description = 'Votre véhicule de service est sortie',
                     type = 'success'
                 })
-                if Chapo.Framework == 'qb' then    
+                if Ptc.Framework == 'qb' then    
                     TriggerEvent("vehiclekeys:client:SetOwner", GetVehicleNumberPlateText(currentCar)) 
                 end
-                if Chapo.CleVehicule then
+                if Ptc.CleVehicule then
                     local plate = GetVehicleNumberPlateText(currentCar)
                     keyusingget(plate)
                 end
@@ -77,14 +77,14 @@ for k,v in ipairs(Chapo.GarageMenu) do
 end
 
 lib.registerContext({
-    id = 'chpd_menu_garade',
+    id = 'ptc_menu_garade',
     title = 'Garage Police', 
     options = {
         {
             title = 'Sortir un véhicule',
             icon = 'right-from-bracket',
             onSelect = function()
-                lib.showContext('chpd_menu_garade_car')
+                lib.showContext('ptc_menu_garade_car')
             end
         },
         {
@@ -118,11 +118,11 @@ lib.registerContext({
 }) 
 
 lib.registerContext({
-    id = 'chpd_menu_garade_car',
+    id = 'ptc_menu_garade_car',
     title = 'Garage Police', 
     menu = 'menu2',
     onBack = function()
-        lib.showContext('chpd_menu_garade')
+        lib.showContext('ptc_menu_garade')
     end,
     options = garagemenu
 }) 
