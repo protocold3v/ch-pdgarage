@@ -2,7 +2,7 @@ fx_version 'adamant'
 lua54 'yes'
 game 'gta5'
 
-description 'Chapo'
+description 'Ptc'
 
 client_scripts {
 	'client/client.lua'
